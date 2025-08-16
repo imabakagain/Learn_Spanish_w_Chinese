@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西班牙语单词学习</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>西班牙语单词学习</h1>
+        
+        <div class="word-display">
+            <h2 id="spanish-word">加载中...</h2>
+            <p>请输入对应的汉语翻译</p>
+        </div>
+        
+        <div class="input-section">
+            <label for="chinese-input">汉语翻译：</label>
+            <input type="text" id="chinese-input" placeholder="输入对应的汉语翻译..." autocomplete="off">
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-primary" id="check-btn">检查答案</button>
+            <button class="btn btn-secondary" id="next-btn">下一个</button>
+        </div>
+        
+        <div id="feedback"></div>
+        
+        <div class="progress">
+            <h3>学习进度</h3>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="total-attempts">0</div>
+                    <div class="stat-label">总答题</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="correct-count">0</div>
+                    <div class="stat-label">正确</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="incorrect-count">0</div>
+                    <div class="stat-label">错误</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="accuracy">0%</div>
+                    <div class="stat-label">正确率</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
