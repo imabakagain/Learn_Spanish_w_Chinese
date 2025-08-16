@@ -6,6 +6,17 @@ let totalWords = 0;
 let correctAnswers = 0;
 let incorrectAnswers = 0;
 
+// Visitor count functionality
+function updateVisitorCount() {
+    let count = localStorage.getItem('visitorCount');
+    if (count === null) {
+        count = 0;
+    }
+    count = parseInt(count) + 1;
+    localStorage.setItem('visitorCount', count);
+    document.getElementById('visitor-count').textContent = count;
+}
+
 // Load CSV data and initialize the app
 async function loadVocabulary() {
     try {
@@ -133,4 +144,7 @@ document.getElementById('check-btn').addEventListener('click', checkAnswer);
 document.getElementById('next-btn').addEventListener('click', showNextWord);
 
 // Initialize the app when page loads
-document.addEventListener('DOMContentLoaded', loadVocabulary);
+document.addEventListener('DOMContentLoaded', function() {
+    updateVisitorCount();
+    loadVocabulary();
+});
