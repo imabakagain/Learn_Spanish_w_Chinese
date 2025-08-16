@@ -6,15 +6,19 @@ let totalWords = 0;
 let correctAnswers = 0;
 let incorrectAnswers = 0;
 
-// Visitor count functionality
-function updateVisitorCount() {
-    let count = localStorage.getItem('visitorCount');
-    if (count === null) {
-        count = 0;
+// Visitor count functionality (Node.js server-side)
+async function updateVisitorCount() {
+    try {
+        const response = await fetch('/api/visitor-count');
+        const data = await response.json();
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        document.getElementById('visitor-count').textContent = data.count;
+    } catch (error) {
+        console.error('Error fetching visitor count:', error);
+        document.getElementById('visitor-count').textContent = '--';
     }
-    count = parseInt(count) + 1;
-    localStorage.setItem('visitorCount', count);
-    document.getElementById('visitor-count').textContent = count;
 }
 
 // Load CSV data and initialize the app
