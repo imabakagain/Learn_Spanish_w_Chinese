@@ -41,10 +41,50 @@ h1 {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+.word-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
 .word-display h2 {
     font-size: 2.5em;
-    margin-bottom: 10px;
+    margin: 0;
     font-weight: 600;
+}
+
+.pronounce-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0.7;
+}
+
+.pronounce-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.pronounce-btn:active {
+    transform: scale(0.95);
+}
+
+.pronounce-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .word-display p {
@@ -201,20 +241,30 @@ h1 {
         padding: 20px;
         margin: 10px;
     }
-    
+
     h1 {
         font-size: 1.8em;
     }
-    
+
     .word-display h2 {
         font-size: 2em;
     }
-    
+
+    .word-container {
+        gap: 10px;
+    }
+
+    .pronounce-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+    }
+
     .buttons {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .btn {
         width: 100%;
         max-width: 200px;
