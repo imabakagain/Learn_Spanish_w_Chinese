@@ -6,6 +6,33 @@ let totalWords = 0;
 let correctAnswers = 0;
 let incorrectAnswers = 0;
 
+// Theme management
+const THEME_KEY = 'spanish-learning-theme';
+
+function getStoredTheme() {
+    return localStorage.getItem(THEME_KEY) || 'default';
+}
+
+function setStoredTheme(theme) {
+    localStorage.setItem(THEME_KEY, theme);
+}
+
+function toggleTheme() {
+    const body = document.body;
+    const isChristmas = body.classList.contains('christmas-theme');
+    const toggleBtn = document.getElementById('theme-toggle');
+
+    if (isChristmas) {
+        body.classList.remove('christmas-theme');
+        setStoredTheme('default');
+        toggleBtn.innerHTML = '<span class="theme-icon">🎄</span><span class="theme-text">圣诞主题</span>';
+    } else {
+        body.classList.add('christmas-theme');
+        setStoredTheme('christmas');
+        toggleBtn.innerHTML = '<span class="theme-icon">🌟</span><span class="theme-text">默认主题</span>';
+    }
+}
+
 // Speech pronunciation management
 class SpanishPronunciationManager {
     constructor() {
@@ -280,6 +307,17 @@ document.getElementById('pronounce-btn').addEventListener('click', function() {
 
 // Initialize the app when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize theme
+    const savedTheme = getStoredTheme();
+    if (savedTheme === 'christmas') {
+        document.body.classList.add('christmas-theme');
+        document.getElementById('theme-toggle').innerHTML = '<span class="theme-icon">🌟</span><span class="theme-text">默认主题</span>';
+    }
+
+    // Add theme toggle button event listener
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+    // Initialize the app
     updateVisitorCount();
     loadVocabulary();
 });
