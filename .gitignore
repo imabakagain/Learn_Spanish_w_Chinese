@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Runtime data
+visitor_count.txt
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# Playwright testing
+.playwright-mcp/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build output
+dist/
+build/
+
+# Coverage reports
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+visitor_count.txt

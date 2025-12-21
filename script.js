@@ -175,7 +175,16 @@ async function loadVocabulary() {
         const lines = text.trim().split('\n');
         vocabulary = lines.map(line => {
             const [spanish, chinese] = line.split(',');
-            return { spanish: spanish.trim(), chinese: chinese.trim() };
+            return {
+                spanish: spanish.trim(),
+                chinese: chinese.trim(),
+                difficulty: 5,
+                consecutiveCorrect: 0,
+                lastReviewed: null,
+                nextReview: null,
+                timesReviewed: 0,
+                timesCorrect: 0
+            };
         });
         
         totalWords = vocabulary.length;
@@ -188,11 +197,24 @@ async function loadVocabulary() {
     }
 }
 
-// Display a random word
+// Display a word using weighted random selection
 function showNextWord() {
     if (vocabulary.length === 0) return;
 
-    currentIndex = Math.floor(Math.random() * vocabulary.length);
+    // Weighted random selection - higher difficulty = higher chance
+    const weights = vocabulary.map(word => 1 + word.difficulty);
+    const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+    let random = Math.random() * totalWeight;
+
+    currentIndex = 0;
+    for (let i = 0; i < vocabulary.length; i++) {
+        random -= weights[i];
+        if (random <= 0) {
+            currentIndex = i;
+            break;
+        }
+    }
+
     currentWord = vocabulary[currentIndex];
 
     document.getElementById('spanish-word').textContent = currentWord.spanish;
@@ -214,21 +236,28 @@ function showNextWord() {
 function checkAnswer() {
     const userInput = document.getElementById('chinese-input').value.trim();
     const feedback = document.getElementById('feedback');
-    
+
     if (!userInput) {
         feedback.innerHTML = '<div class="feedback incorrect">请输入翻译！</div>';
         return;
     }
-    
+
     const isCorrect = userInput.toLowerCase() === currentWord.chinese.toLowerCase();
-    
+
     if (isCorrect) {
         correctAnswers++;
         feedback.innerHTML = '<div class="feedback correct">✓ 正确！</div>';
-        
-        // Remove the word from vocabulary to avoid repetition
-        vocabulary.splice(currentIndex, 1);
-        
+
+        // Update SRS fields
+        currentWord.consecutiveCorrect++;
+        currentWord.difficulty = Math.max(0, currentWord.difficulty - 1);
+        currentWord.timesCorrect++;
+
+        // Remove only if mastered (difficulty 0 + 3+ consecutive correct)
+        if (currentWord.difficulty === 0 && currentWord.consecutiveCorrect >= 3) {
+            vocabulary.splice(currentIndex, 1);
+        }
+
         setTimeout(() => {
             if (vocabulary.length > 0) {
                 showNextWord();
@@ -238,17 +267,21 @@ function checkAnswer() {
         }, 1500);
     } else {
         incorrectAnswers++;
-        feedback.innerHTML = 
+        feedback.innerHTML =
             `<div class="feedback incorrect">
                 ✗ 错误！<br>
                 正确答案是：<strong>${currentWord.chinese}</strong>
             </div>`;
-        
+
+        // Update SRS fields for incorrect answer
+        currentWord.consecutiveCorrect = 0;
+        currentWord.difficulty = Math.min(5, currentWord.difficulty + 1);
+
         setTimeout(() => {
             showNextWord();
         }, 3000);
     }
-    
+
     updateStats();
 }
 
