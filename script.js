@@ -183,7 +183,9 @@ async function loadVocabulary() {
                 lastReviewed: null,
                 nextReview: null,
                 timesReviewed: 0,
-                timesCorrect: 0
+                timesCorrect: 0,
+                timesIncorrect: 0,
+                consecutiveIncorrect: 0
             };
         });
         
@@ -197,12 +199,24 @@ async function loadVocabulary() {
     }
 }
 
+// Calculate word weight for spaced repetition
+// Error words get dramatically higher weight to ensure they appear more frequently
+function calculateWordWeight(word) {
+    // If word has incorrect answers, give it extremely high weight
+    if (word.timesIncorrect > 0) {
+        // Base 400x weight + incorrect count bonus + consecutive incorrect bonus
+        return 400 + (word.timesIncorrect * 100) + (word.consecutiveIncorrect * 50);
+    }
+    // New words get minimal weight (1)
+    return 1;
+}
+
 // Display a word using weighted random selection
 function showNextWord() {
     if (vocabulary.length === 0) return;
 
-    // Weighted random selection - higher difficulty = higher chance
-    const weights = vocabulary.map(word => 1 + word.difficulty);
+    // Weighted random selection - error words get dramatically higher weight
+    const weights = vocabulary.map(word => calculateWordWeight(word));
     const totalWeight = weights.reduce((sum, w) => sum + w, 0);
     let random = Math.random() * totalWeight;
 
@@ -250,6 +264,7 @@ function checkAnswer() {
 
         // Update SRS fields
         currentWord.consecutiveCorrect++;
+        currentWord.consecutiveIncorrect = 0;
         currentWord.difficulty = Math.max(0, currentWord.difficulty - 1);
         currentWord.timesCorrect++;
 
@@ -275,6 +290,8 @@ function checkAnswer() {
 
         // Update SRS fields for incorrect answer
         currentWord.consecutiveCorrect = 0;
+        currentWord.consecutiveIncorrect++;
+        currentWord.timesIncorrect++;
         currentWord.difficulty = Math.min(5, currentWord.difficulty + 1);
 
         setTimeout(() => {
@@ -350,7 +367,75 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add theme toggle button event listener
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
+    // Initialize hamburger menu
+    initHamburgerMenu();
+
     // Initialize the app
     updateVisitorCount();
     loadVocabulary();
 });
+
+// Hamburger menu functionality
+function initHamburgerMenu() {
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const dropdown = document.getElementById('hamburger-dropdown');
+
+    // Toggle menu on button click
+    hamburgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+        hamburgerBtn.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function() {
+        dropdown.classList.remove('show');
+        hamburgerBtn.classList.remove('active');
+    });
+
+    // Prevent menu from closing when clicking inside
+    dropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Handle menu item clicks
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('href').substring(1);
+            showSection(target);
+            dropdown.classList.remove('show');
+            hamburgerBtn.classList.remove('active');
+        });
+    });
+
+    // Handle back buttons
+    document.querySelectorAll('.back-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            hideAllSections();
+        });
+    });
+}
+
+// Show specific section
+function showSection(sectionId) {
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => section.style.display = 'none');
+
+    if (sectionId) {
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+            document.getElementById('content-sections').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+}
+
+// Hide all sections and return to main app
+function hideAllSections() {
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => section.style.display = 'none');
+    document.getElementById('content-sections').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}

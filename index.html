@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- 汉堡菜单 -->
+    <div class="hamburger-menu-container">
+        <button id="hamburger-btn" class="hamburger-btn" title="菜单">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <div id="hamburger-dropdown" class="hamburger-dropdown">
+            <a href="#changelog" class="dropdown-item">更新日志</a>
+            <a href="#contact" class="dropdown-item">联系方式</a>
+        </div>
+    </div>
+
     <div class="theme-toggle-container">
         <button id="theme-toggle" class="theme-toggle-btn" title="切换主题">
             <span class="theme-icon">🎄</span>
@@ -66,7 +79,61 @@
             <span id="visitor-count">0</span>
         </div>
     </div>
-    
+
+    <!-- 内容区域 -->
+    <div id="content-sections" class="content-sections">
+        <section id="changelog" class="content-section">
+            <h2>📝 更新日志</h2>
+            <div class="changelog-content">
+                <div class="changelog-item">
+                    <h3>v0.2 - 2025-12-21</h3>
+                    <ul>
+                        <li>✨ 新增：间隔重复学习算法，智能优先困难词汇</li>
+                        <li>✨ 新增：汉堡菜单导航系统</li>
+                        <li>✨ 新增：文本转语音发音功能</li>
+                        <li>✨ 圣诞主题切换功能</li>
+                        <li>📊 优化：学习进度统计显示</li>
+                        <li>🎨 优化：界面交互体验</li>
+                    </ul>
+                </div>
+                <div class="changelog-item">
+                    <h3>v0.1 - 2025-08-16</h3>
+                    <ul>
+                        <li>🎉 初始版本发布</li>
+                        <li>📚 8000个西班牙语基础词汇</li>
+                        <li>📈 学习进度跟踪</li>
+                        <li>👥 访问次数统计</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="back-btn" onclick="hideAllSections()">← 返回学习</button>
+        </section>
+
+        <section id="contact" class="content-section">
+            <h2>📧 联系方式</h2>
+            <div class="contact-content">
+                <div class="contact-item">
+                    <h3>🐙 项目地址</h3>
+                    <p><a href="https://github.com/imabakagain/Learn_Spanish_w_Chinese" target="_blank">GitHub 项目主页</a></p>
+                </div>
+                <div class="contact-item">
+                    <h3>💬 意见反馈</h3>
+                    <p>📕小红书：来噜吞Naruto</p>
+                </div>
+                <div class="contact-item">
+                    <h3>👥 交流群</h3>
+                    <p>QQ群：暂无</p>
+                    <p>微信群：暂无</p>
+                </div>
+                <div class="contact-item">
+                    <h3>❤️ 支持我们</h3>
+                    <p>如果这个项目对你有帮助，欢迎给个⭐️ Star！</p>
+                </div>
+            </div>
+            <button class="back-btn" onclick="hideAllSections()">← 返回学习</button>
+        </section>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
