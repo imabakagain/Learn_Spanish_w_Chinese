@@ -19,18 +19,28 @@ function setStoredTheme(theme) {
 
 function toggleTheme() {
     const body = document.body;
-    const isChristmas = body.classList.contains('christmas-theme');
     const toggleBtn = document.getElementById('theme-toggle');
+    const currentTheme = getStoredTheme();
 
-    if (isChristmas) {
-        body.classList.remove('christmas-theme');
-        setStoredTheme('default');
+    // Cycle: spring → default → christmas → spring
+    let newTheme;
+    if (currentTheme === 'spring') {
+        newTheme = 'default';
+        body.classList.remove('spring-theme');
         toggleBtn.innerHTML = '<span class="theme-icon">🎄</span><span class="theme-text">圣诞主题</span>';
-    } else {
+    } else if (currentTheme === 'default') {
+        newTheme = 'christmas';
         body.classList.add('christmas-theme');
-        setStoredTheme('christmas');
-        toggleBtn.innerHTML = '<span class="theme-icon">🌟</span><span class="theme-text">默认主题</span>';
+        toggleBtn.innerHTML = '<span class="theme-icon">🧧</span><span class="theme-text">春节主题</span>';
+    } else {
+        // christmas → spring
+        newTheme = 'spring';
+        body.classList.remove('christmas-theme');
+        body.classList.add('spring-theme');
+        toggleBtn.innerHTML = '<span class="theme-icon">🎊</span><span class="theme-text">默认主题</span>';
     }
+
+    setStoredTheme(newTheme);
 }
 
 // Speech pronunciation management
@@ -357,11 +367,21 @@ document.getElementById('pronounce-btn').addEventListener('click', function() {
 
 // Initialize the app when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize theme
+    // Initialize theme (default to spring if none saved)
     const savedTheme = getStoredTheme();
+    const toggleBtn = document.getElementById('theme-toggle');
+
     if (savedTheme === 'christmas') {
         document.body.classList.add('christmas-theme');
-        document.getElementById('theme-toggle').innerHTML = '<span class="theme-icon">🌟</span><span class="theme-text">默认主题</span>';
+        toggleBtn.innerHTML = '<span class="theme-icon">🧧</span><span class="theme-text">春节主题</span>';
+    } else if (savedTheme === 'spring') {
+        document.body.classList.add('spring-theme');
+        toggleBtn.innerHTML = '<span class="theme-icon">🎊</span><span class="theme-text">默认主题</span>';
+    } else {
+        // Default to spring theme
+        document.body.classList.add('spring-theme');
+        setStoredTheme('spring');
+        toggleBtn.innerHTML = '<span class="theme-icon">🎊</span><span class="theme-text">默认主题</span>';
     }
 
     // Add theme toggle button event listener

@@ -421,6 +421,151 @@ body.christmas-theme .input-section input:focus {
     border-color: #c62828;
 }
 
+/* ========== 春节主题样式 ========== */
+body.spring-theme {
+    background: linear-gradient(135deg, #c64e45 0%, #d15f55 50%, #c64e45 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 烟花动画效果 */
+body.spring-theme::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.25) 3px, transparent 4px),
+        radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.2) 2px, transparent 3px),
+        radial-gradient(circle at 40% 40%, rgba(255, 140, 66, 0.3) 2px, transparent 3px),
+        radial-gradient(circle at 60% 70%, rgba(255, 193, 7, 0.25) 3px, transparent 4px),
+        radial-gradient(circle at 30% 60%, rgba(255, 152, 0, 0.3) 2px, transparent 3px),
+        radial-gradient(circle at 70% 30%, rgba(255, 235, 59, 0.2) 2.5px, transparent 3.5px);
+    background-size: 100px 100px, 150px 150px, 120px 120px, 80px 80px, 140px 140px, 90px 90px;
+    animation: fireworks-rise 8s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes fireworks-rise {
+    0% { transform: translateY(100vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px); opacity: 0; }
+}
+
+/* 春节主题容器 */
+body.spring-theme .container {
+    background: linear-gradient(135deg, #fff8e1 0%, #fff 50%, #fff8e1 100%);
+    border: 2px solid #e6c06a;
+    position: relative;
+}
+
+body.spring-theme .container::before {
+    content: '🧧';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    font-size: 2em;
+    animation: lantern-swing 3s ease-in-out infinite;
+}
+
+body.spring-theme .container::after {
+    content: '🧧';
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    font-size: 2em;
+    animation: lantern-swing 3s ease-in-out infinite reverse;
+}
+
+@keyframes lantern-swing {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+/* 春节主题标题 */
+body.spring-theme h1 {
+    color: #d32f2f;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 春节主题单词显示区 */
+body.spring-theme .word-display {
+    background: linear-gradient(135deg, #d65656, #e86e6e);
+    border: 2px solid #d4a84b;
+    position: relative;
+    overflow: hidden;
+}
+
+body.spring-theme .word-display::before {
+    content: '✨';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 1.2em;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+body.spring-theme .word-display::after {
+    content: '✨';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    animation: sparkle 1.5s ease-in-out infinite 0.5s;
+}
+
+/* 春节主题按钮 */
+body.spring-theme .btn-primary {
+    background: linear-gradient(135deg, #c94c4c, #e35d5d);
+    border: 2px solid #e6c06a;
+    color: white;
+}
+
+body.spring-theme .btn-primary:hover {
+    background: linear-gradient(135deg, #e35d5d, #c94c4c);
+    box-shadow: 0 5px 15px rgba(201, 76, 76, 0.4);
+}
+
+body.spring-theme .btn-secondary {
+    background: #fff9e6;
+    color: #c94c4c;
+    border: 2px solid #c94c4c;
+}
+
+body.spring-theme .btn-secondary:hover {
+    background: #fff3cc;
+}
+
+/* 春节主题进度条 */
+body.spring-theme .progress-fill {
+    background: linear-gradient(90deg, #8b3a3a, #a64d4d);
+}
+
+/* 春节主题统计数据 */
+body.spring-theme .stat-value {
+    color: #c94c4c;
+    font-weight: bold;
+}
+
+body.spring-theme #visitor-count {
+    color: #c94c4c;
+    font-weight: bold;
+}
+
+/* 春节主题输入框 */
+body.spring-theme .input-section input {
+    border: 2px solid #d4a84b;
+}
+
+body.spring-theme .input-section input:focus {
+    border-color: #c94c4c;
+    box-shadow: 0 0 8px rgba(201, 76, 76, 0.3);
+}
+
 /* 响应式适配 */
 @media (max-width: 480px) {
     .theme-toggle-container {
