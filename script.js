@@ -395,6 +395,124 @@ document.addEventListener('DOMContentLoaded', function() {
     loadVocabulary();
 });
 
+// AI Chat functionality
+let aiConversationHistory = [
+    {
+        role: 'system',
+        content: '你是一个西班牙语学习助手，可以帮助用户学习西班牙语词汇、语法和对话。请用中文回复，如果用户用西班牙语提问，可以适当用西班牙语回答并翻译解释。用户正在学习西班牙语，请给予鼓励和帮助。'
+    }
+];
+
+document.getElementById('ai-chat-btn').addEventListener('click', function() {
+    showSection('ai-chat');
+});
+
+// AI message handling
+const aiInput = document.getElementById('ai-input');
+const aiSendBtn = document.getElementById('ai-send-btn');
+const aiMessages = document.getElementById('ai-messages');
+
+function sendAiMessage() {
+    const message = aiInput.value.trim();
+    if (!message) return;
+
+    // Add user message to UI
+    const userMsg = document.createElement('div');
+    userMsg.className = 'ai-message user';
+    userMsg.textContent = message;
+    aiMessages.appendChild(userMsg);
+
+    // Add user message to history
+    aiConversationHistory.push({
+        role: 'user',
+        content: message
+    });
+
+    // Clear input
+    aiInput.value = '';
+
+    // Scroll to bottom
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+
+    // Show loading indicator
+    const loadingMsg = document.createElement('div');
+    loadingMsg.className = 'ai-message ai loading';
+    loadingMsg.textContent = '思考中...';
+    aiMessages.appendChild(loadingMsg);
+
+    // Call API
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            messages: aiConversationHistory
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Remove loading indicator
+        loadingMsg.remove();
+
+        if (data.error) {
+            const errorMsg = document.createElement('div');
+            errorMsg.className = 'ai-message ai';
+            errorMsg.textContent = '抱歉：' + data.error;
+            aiMessages.appendChild(errorMsg);
+            return;
+        }
+
+        // Clean AI response: remove thinking tags with content, and convert markdown bold
+        let aiContent = data.choices?.[0]?.message?.content || '抱歉，我没有收到有效的回复。';
+        aiContent = aiContent.replace(/<think>[\s\S]*?<\/think>/g, '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/^### (.+)$/gm, '<h4>$1</h4>').replace(/^## (.+)$/gm, '<h3>$1</h3>').replace(/^# (.+)$/gm, '<h2>$1</h2>').replace(/\|(.+)\|\s*\n\|[-:\s|]+\|\n((?:\|.+\|\s*\n?)+)/g, (match, header, body) => {
+            const headers = header.split('|').map(h => h.trim()).filter(Boolean);
+            const rows = body.trim().split('\n').map(row => row.split('|').map(c => c.trim()).filter(Boolean));
+            const thead = headers.map(h => `<th>${h}</th>`).join('');
+            const tbody = rows.map(row => `<tr>${row.map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
+            return `<table><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table>`;
+        });
+
+        // Add AI response to UI
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'ai-message ai';
+        aiMsg.innerHTML = aiContent;
+        aiMessages.appendChild(aiMsg);
+
+        // Add AI response to history
+        aiConversationHistory.push({
+            role: 'assistant',
+            content: aiContent
+        });
+
+        // Scroll to bottom
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+    })
+    .catch(error => {
+        loadingMsg.remove();
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'ai-message ai';
+        errorMsg.textContent = '网络错误，请稍后重试。';
+        aiMessages.appendChild(errorMsg);
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+    });
+}
+
+aiSendBtn.addEventListener('click', sendAiMessage);
+
+aiInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendAiMessage();
+    }
+});
+
+document.querySelectorAll('.ai-hint-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+        aiInput.value = btn.dataset.question;
+        sendAiMessage();
+    });
+});
+
 // Hamburger menu functionality
 function initHamburgerMenu() {
     const hamburgerBtn = document.getElementById('hamburger-btn');

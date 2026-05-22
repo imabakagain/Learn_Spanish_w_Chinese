@@ -26,6 +26,13 @@
             <span class="theme-text">圣诞主题</span>
         </button>
     </div>
+
+    <div class="ai-chat-container">
+        <button id="ai-chat-btn" class="ai-chat-btn" title="AI对话">
+            <span class="ai-icon">🤖</span>
+            <span class="ai-text">AI助手</span>
+        </button>
+    </div>
     <div class="container">
         <h1>西语随时学-单词</h1>
         
@@ -86,6 +93,12 @@
             <h2>📝 更新日志</h2>
             <div class="changelog-content">
                 <div class="changelog-item">
+                    <h3>v0.4 - 2026-05-22</h3>
+                    <ul>
+                        <li>🤖 新增：AI对话助手功能，可与MiniMax大模型对话学习西班牙语</li>
+                    </ul>
+                </div>
+                <div class="changelog-item">
                     <h3>v0.3 - 2026-02-16</h3>
                     <ul>
                         <li>🧧 新增：春节主题切换功能</li>
@@ -134,6 +147,30 @@
                 <div class="contact-item">
                     <h3>❤️ 支持我们</h3>
                     <p>如果这个项目对你有帮助，欢迎给个⭐️ Star！</p>
+                </div>
+            </div>
+            <button class="back-btn" onclick="hideAllSections()">← 返回学习</button>
+        </section>
+
+        <section id="ai-chat" class="content-section">
+            <h2>🤖 AI 对话助手</h2>
+            <div class="ai-chat-wrapper">
+                <div class="ai-hints">
+                    <p class="ai-hints-title">你可以问：【💬】</p>
+                    <div class="ai-hints-list">
+                        <button class="ai-hint-item" data-question="数字1-10怎么说">数字1-10怎么说</button>
+                        <button class="ai-hint-item" data-question="今天天气怎么样">今天天气怎么样</button>
+                        <button class="ai-hint-item" data-question="和我用西班牙语聊聊电视剧">和我用西班牙语聊聊电视剧</button>
+                    </div>
+                </div>
+                <div class="ai-messages" id="ai-messages">
+                    <div class="ai-message ai">
+                        你好！我是AI助手，可以帮助你学习西班牙语。有什么我可以帮你的吗？
+                    </div>
+                </div>
+                <div class="ai-input-area">
+                    <input type="text" id="ai-input" placeholder="输入消息..." autocomplete="off">
+                    <button class="btn btn-primary" id="ai-send-btn">发送</button>
                 </div>
             </div>
             <button class="back-btn" onclick="hideAllSections()">← 返回学习</button>
